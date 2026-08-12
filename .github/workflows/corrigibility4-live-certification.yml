@@ -1,1 +1,102 @@
+name: EBB CORRIGIBILITY-4 Live Semantic and Cross-Browser Certification
 
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: corrigibility-4-live-certification
+  cancel-in-progress: false
+
+jobs:
+  certify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install browser harness dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install playwright
+          python -m playwright install --with-deps chromium firefox webkit
+
+      - name: Verify frozen candidate files
+        run: |
+          python CORRIGIBILITY-4/harness/c4_preflight.py
+
+      - name: Cross-browser core regression
+        env:
+          C4_STAGING_ROOT: ${{ github.workspace }}/CORRIGIBILITY-4/staging
+          C4_OUTPUT_DIR: ${{ github.workspace }}/c4-cross-browser
+          C4_BROWSERS: chromium,firefox,webkit
+        run: |
+          python CORRIGIBILITY-4/harness/run_c4_cross_browser.py
+
+      - name: Live targeted Golden-Goose/Midas semantic sample
+        env:
+          C4_STAGING_ROOT: ${{ github.workspace }}/CORRIGIBILITY-4/staging
+          C4_OUTPUT_DIR: ${{ github.workspace }}/c4-live-semantic
+          C4_FIXTURES: ${{ github.workspace }}/CORRIGIBILITY-4/harness/CORRIGIBILITY-4_GOOSE_MIDAS_TARGETED_SEMANTIC_FIXTURES.json
+        run: |
+          python CORRIGIBILITY-4/harness/run_c4_live_semantic.py
+
+      - name: Build separated blind and custodian semantic artifacts
+        run: |
+          mkdir -p c4-semantic-separated
+          python CORRIGIBILITY-4/harness/build_c4_blind_artifacts.py \
+            --raw c4-live-semantic/CORRIGIBILITY-4_LIVE_SEMANTIC_RAW.json \
+            --outdir c4-semantic-separated
+
+      - name: Build run receipt
+        if: always()
+        run: |
+          python CORRIGIBILITY-4/harness/c4_run_receipt.py \
+            --cross c4-cross-browser/CORRIGIBILITY-4_CROSS_BROWSER_RESULTS.json \
+            --semantic c4-live-semantic/CORRIGIBILITY-4_LIVE_SEMANTIC_RAW.json \
+            --out c4-run-receipt.json
+
+      - name: Upload cross-browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: corrigibility4-cross-browser
+          path: c4-cross-browser/
+          if-no-files-found: warn
+
+      - name: Upload blind semantic review artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: corrigibility4-semantic-blind
+          path: |
+            c4-semantic-separated/CORRIGIBILITY-4_SEMANTIC_BLIND_REVIEW_INPUT.json
+            c4-semantic-separated/CORRIGIBILITY-4_Blind_Semantic_Reviewer.html
+            c4-semantic-separated/CORRIGIBILITY-4_SEMANTIC_SEPARATION_RECEIPT.json
+          if-no-files-found: warn
+
+      - name: Upload semantic custodian artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: corrigibility4-semantic-custodian
+          path: |
+            c4-live-semantic/CORRIGIBILITY-4_LIVE_SEMANTIC_RAW.json
+            c4-semantic-separated/CORRIGIBILITY-4_SEMANTIC_CUSTODIAN_KEY.csv
+          if-no-files-found: warn
+
+      - name: Upload run receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: corrigibility4-run-receipt
+          path: c4-run-receipt.json
+          if-no-files-found: warn
