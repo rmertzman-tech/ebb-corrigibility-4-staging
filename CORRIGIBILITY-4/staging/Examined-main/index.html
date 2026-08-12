@@ -591,7 +591,6 @@ async function requestClaude(system,messages,maxTokens){
       credentials:'omit',cache:'no-store',referrerPolicy:'no-referrer',signal:controller.signal});
   }catch(networkErr){ throw new Error('NETWORK_ERROR: '+networkErr.name+': '+networkErr.message); }
   finally{clearTimeout(timeoutId);if(externalSignal)externalSignal.removeEventListener('abort',relayAbort);}
-  if(!resp.ok){ var errBody=await resp.text(); throw new Error('HTTP_'+resp.status+': '+errBody); }
   if(!resp.ok){
   var errBody=await resp.text();
   throw new Error('HTTP_'+resp.status+': '+errBody);
