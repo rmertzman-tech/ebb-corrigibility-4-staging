@@ -42,6 +42,8 @@ jobs:
           python CORRIGIBILITY-4/harness/run_c4_cross_browser.py
 
       - name: Live targeted Golden-Goose/Midas semantic sample
+        id: live_semantic
+        continue-on-error: true
         env:
           C4_STAGING_ROOT: ${{ github.workspace }}/CORRIGIBILITY-4/staging
           C4_OUTPUT_DIR: ${{ github.workspace }}/c4-live-semantic
@@ -50,6 +52,7 @@ jobs:
           python CORRIGIBILITY-4/harness/run_c4_live_semantic.py
 
       - name: Build separated blind and custodian semantic artifacts
+        if: always()
         run: |
           mkdir -p c4-semantic-separated
           python CORRIGIBILITY-4/harness/build_c4_blind_artifacts.py \
@@ -100,3 +103,27 @@ jobs:
           name: corrigibility4-run-receipt
           path: c4-run-receipt.json
           if-no-files-found: warn
+
+      - name: Enforce semantic generation gate
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          raw = Path('c4-live-semantic/CORRIGIBILITY-4_LIVE_SEMANTIC_RAW.json')
+          if not raw.exists():
+              raise SystemExit('Semantic raw artifact is missing.')
+
+          data = json.loads(raw.read_text(encoding='utf-8'))
+          records = int(data.get('records', 0))
+          errors = int(data.get('errors', 0))
+          ok = int(data.get('ok', 0))
+
+          if records != 29:
+              raise SystemExit(f'Expected 29 semantic records, found {records}.')
+          if errors != 0 or ok != 29:
+              raise SystemExit(f'Semantic generation gate failed: ok={ok}, errors={errors}, records={records}.')
+
+          print('Semantic generation gate passed: 29/29 new usable responses.')
+          PY
