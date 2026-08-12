@@ -1,0 +1,119 @@
+{
+  "files": [
+    {
+      "path": "Examined-main/CORRIGIBILITY-2_EXAMINED_RELEASE_NOTE.md",
+      "sha256": "b4a18f20079144950999064aa4bb4f7b389dbb71a31591740b0bcd107bcacbbc",
+      "bytes": 526
+    },
+    {
+      "path": "Examined-main/CORRIGIBILITY-4_EXAMINED_A11Y_RELEASE_NOTE.md",
+      "sha256": "a328f92e87c097c826458e96239a5c302b21a92fbcee155e7d2437bd43e57143",
+      "bytes": 501
+    },
+    {
+      "path": "Examined-main/EBB-FALL-RC1_EXAMINED_RELEASE_NOTE.md",
+      "sha256": "51e7191d0933c1a874f6414f6999522f554a68a6c705734cf2b32fb35a5de013",
+      "bytes": 320
+    },
+    {
+      "path": "Examined-main/index.html",
+      "sha256": "60af06d6b1b1026a9268d0dac3d748781dd1b470ce036c722f4df44d8271f43b",
+      "bytes": 138124
+    },
+    {
+      "path": "SPC-FALL-2026-Navigator-main/CORRIGIBILITY-2_NAVIGATOR_RELEASE_NOTE.md",
+      "sha256": "df2ef86faf82151e719bada6efc6ec06728686f9a4491bf875c4ecb05b068224",
+      "bytes": 493
+    },
+    {
+      "path": "SPC-FALL-2026-Navigator-main/EBB-FALL-RC1_NAVIGATOR_RELEASE_NOTE.md",
+      "sha256": "117e3a51274af570553a8920a7c7d84725b9b661fd6b9ac22ab5ad59ba87c9a9",
+      "bytes": 303
+    },
+    {
+      "path": "SPC-FALL-2026-Navigator-main/NAV-FALL-2026-19_v5_pwa_restored_patch_report.md",
+      "sha256": "b98f07a98ca8915f7d95cc6416871631e560642b463cf204ef8c0e0d2071f8c4",
+      "bytes": 3372
+    },
+    {
+      "path": "SPC-FALL-2026-Navigator-main/NAV-FALL-2026-21_v7_final_polish_patch_report.md",
+      "sha256": "54f048fead59ae8198b5cfd2ac0db66349fc2d929560348cb04b22982f27dbe9",
+      "bytes": 1606
+    },
+    {
+      "path": "SPC-FALL-2026-Navigator-main/NAV-FALL-2026-22_v8_visible_install_patch_report.md",
+      "sha256": "8ead286bc934095a76c13fb57a99911884569a8f067d6549849cf7da9034978d",
+      "bytes": 1828
+    },
+    {
+      "path": "SPC-FALL-2026-Navigator-main/NAV-FALL-2026-23_v23_safety_candidate_patch_report.md",
+      "sha256": "a9d27490d971ad35c0e6664e4aef32d068917db369a0e1ff4ea387e6570f5795",
+      "bytes": 2775
+    },
+    {
+      "path": "SPC-FALL-2026-Navigator-main/NAV-FALL-2026-24_v24_json_import_compatibility_patch_report.md",
+      "sha256": "1643d9f4f1f02416fc909e24e6e49deb268cfc0ff4a2ffbb32ee42ebfb93f840",
+      "bytes": 1291
+    },
+    {
+      "path": "SPC-FALL-2026-Navigator-main/NAV-FALL-2026-25_v25_prf_import_button_hotfix_report.md",
+      "sha256": "7c5b4b748bbb66ddff0e38cf9421d0b29458fd16ef973c6545d783646e431127",
+      "bytes": 1123
+    },
+    {
+      "path": "SPC-FALL-2026-Navigator-main/README_PWA_READY.md",
+      "sha256": "5d204384b080abe6742fa5f9874abc2860b6eb2f83c5acb021f5724078652234",
+      "bytes": 845
+    },
+    {
+      "path": "SPC-FALL-2026-Navigator-main/favicon.ico",
+      "sha256": "18e20dd0147bcada4b972980d932643f5a56ad311a27cea9bda6c96f89e4ef00",
+      "bytes": 8936
+    },
+    {
+      "path": "SPC-FALL-2026-Navigator-main/icon-180.png",
+      "sha256": "1f50c0f2b8f802e670ffb76fe89706a3f03539fd25d96cd9abbbdf7d5721412e",
+      "bytes": 2357
+    },
+    {
+      "path": "SPC-FALL-2026-Navigator-main/icon-192.png",
+      "sha256": "c1db020a7f2764671f109d315ee46d9dc92f00428f5cf220996cf9f78f164d2a",
+      "bytes": 2569
+    },
+    {
+      "path": "SPC-FALL-2026-Navigator-main/icon-512.png",
+      "sha256": "d70f585991bcb98ef5618f877db9231629e56555e30c7818bd9b16e21d897047",
+      "bytes": 7293
+    },
+    {
+      "path": "SPC-FALL-2026-Navigator-main/icons/icon-180.png",
+      "sha256": "1f50c0f2b8f802e670ffb76fe89706a3f03539fd25d96cd9abbbdf7d5721412e",
+      "bytes": 2357
+    },
+    {
+      "path": "SPC-FALL-2026-Navigator-main/icons/icon-192.png",
+      "sha256": "c1db020a7f2764671f109d315ee46d9dc92f00428f5cf220996cf9f78f164d2a",
+      "bytes": 2569
+    },
+    {
+      "path": "SPC-FALL-2026-Navigator-main/icons/icon-512.png",
+      "sha256": "d70f585991bcb98ef5618f877db9231629e56555e30c7818bd9b16e21d897047",
+      "bytes": 7293
+    },
+    {
+      "path": "SPC-FALL-2026-Navigator-main/index.html",
+      "sha256": "83762b5cd191534b6eabb784beee71864e5c2cb1c434fd2218f3c1c8afff731a",
+      "bytes": 769539
+    },
+    {
+      "path": "SPC-FALL-2026-Navigator-main/manifest.json",
+      "sha256": "742c0c5e18b5e8e1007a6518b73dfe091df356fc00eb1428597b9967ae35472d",
+      "bytes": 1137
+    },
+    {
+      "path": "SPC-FALL-2026-Navigator-main/sw.js",
+      "sha256": "047189c1294f43376ee3f0919c0e835f3c82792dbc548e85b490236a0f209fa3",
+      "bytes": 2351
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "name": "The Navigator — Ethics Beyond Boundaries",
+  "short_name": "Navigator",
+  "description": "A local-first Ethics Beyond Boundaries reflection tool with user-controlled AI memory, phenomenological veto controls, explicit support resources, and cross-app JSON compatibility. CORRIGIBILITY-2 staging prototype.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#060b18",
+  "theme_color": "#0D5E57",
+  "categories": [
+    "education",
+    "productivity"
+  ],
+  "lang": "en-US",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "./icons/icon-180.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "id": "./",
+  "display_override": [
+    "standalone",
+    "minimal-ui",
+    "browser"
+  ],
+  "prefer_related_applications": false
+}

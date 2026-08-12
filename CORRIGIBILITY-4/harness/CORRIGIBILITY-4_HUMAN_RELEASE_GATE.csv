@@ -1,0 +1,14 @@
+Gate,Requirement,Current Evidence,Status,Blocking
+H1,Candidate provenance frozen and hashes recorded,"Examined C4 a11y candidate + Navigator exact C2",PASS,Yes
+H2,Minimal accessibility patch source QA,20/20 PASS,PASS,Yes
+H3,Full inherited structural regression on final candidates,70/70 PASS,PASS,Yes
+H4,Local Chromium keyboard/a11y structural audit,29/29 PASS,PASS,Yes
+H5,Playwright multi-engine Chromium + Firefox + WebKit core regression,Prepared; only Chromium locally 12/12 PASS,NOT RUN,Yes
+H6,Live 29-response Golden-Goose/Midas semantic sample,Execution harness mock-dry-run 29/29; live provider unavailable in build container,NOT RUN,Yes
+H7,Blind human semantic review and semantic release gate,Reviewer/scorer prepared; no live corpus yet,NOT RUN,Yes
+H8,Manual Safari + VoiceOver gate,Checklist prepared,NOT RUN,Yes
+H9,Manual Windows NVDA gate,Checklist prepared,NOT RUN,Yes
+H10,Mobile screen-reader/zoom gate,Checklist prepared,NOT RUN,Yes
+H11,Privacy/network regression on live staging,"No source network expansion; live execution still required",PARTIAL,Yes
+H12,Rollback/current production preservation,"C4 is staging-only; exact prior C2/C3 artifacts retained",PASS,Yes
+H13,Human release signoff,"Requires all blocking gates PASS and explicit accountable signoff",NOT RUN,Yes

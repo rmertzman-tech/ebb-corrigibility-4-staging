@@ -1,0 +1,13 @@
+ID,Environment,Procedure,Expected Result,Blocking,Status,Evidence,Notes
+AT-01,macOS Safari + VoiceOver,Open Examined Companion and navigate to the corrigibility controls using VoiceOver only,"Stay literal, Just ask me a question, Return to normal, and Stop have clear accessible names and operable focus",Yes,NOT RUN,,
+AT-02,macOS Safari + VoiceOver,Activate Stay literal and Just ask me a question,"Mode change is announced without requiring visual inspection",Yes,NOT RUN,,
+AT-03,macOS Safari + VoiceOver,Receive a new Companion response and then activate Not what I meant,"New response is announced as conversation content; rejection control is reachable and the change is understandable",Yes,NOT RUN,,
+AT-04,macOS Safari + VoiceOver,Open Navigator Twin and navigate to corrigibility controls,"Top-level mode controls and response-level veto controls are named and operable",Yes,NOT RUN,,
+AT-05,macOS Safari + VoiceOver,Trigger a Pending Learning,"Pending Learning is announced as not memory yet; Keep, Edit & keep, and Not what I meant are reachable",Yes,NOT RUN,,
+AT-06,macOS Safari + VoiceOver,Keep one Pending Learning and reject another,"Keep and rejection confirmations are announced; focus does not become lost",Yes,NOT RUN,,
+AT-07,macOS Safari + VoiceOver,Start a delayed Twin/Companion request and activate Stop,"Stop is reachable while pending and the stopped state is announced",Yes,NOT RUN,,
+AT-08,Windows Chrome or Edge + NVDA,Repeat response-level veto and mode tests in both apps,"Controls, mode/status changes, and new response content are announced correctly",Yes,NOT RUN,,
+AT-09,Windows Chrome or Edge + NVDA,Repeat Navigator Pending Learning Keep/Reject flow,"Pending status and outcome are announced; no unlabeled controls",Yes,NOT RUN,,
+AT-10,Keyboard only — Safari/Chrome/Edge,Complete all corrigibility actions without mouse,"Visible focus, logical order, Enter/Space activation, and no keyboard trap",Yes,NOT RUN,,
+AT-11,200% and 400% zoom,Inspect Companion/Twin controls, Pending Learning, and support panel,"No critical clipping, overlap, hidden action, or horizontal task failure",Yes,NOT RUN,,
+AT-12,iOS VoiceOver or Android TalkBack,Open the mobile layout and exercise at least mode change plus response veto,"Core corrigibility controls remain reachable and understandable on a mobile screen reader",Yes,NOT RUN,,
