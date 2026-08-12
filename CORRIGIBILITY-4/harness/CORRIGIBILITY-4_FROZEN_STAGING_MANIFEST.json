@@ -16,9 +16,11 @@
       "bytes": 320
     },
     {
-      "path": "Examined-main/index.html",
-      "sha256": "60af06d6b1b1026a9268d0dac3d748781dd1b470ce036c722f4df44d8271f43b",
-      "bytes": 138124
+     {
+  "path": "Examined-main/index.html",
+  "sha256": "0f143a7d01b521375e47197ba51331befb2302858259b1f51745d2a09a54e4e9",
+  "bytes": 138633
+}
     },
     {
       "path": "SPC-FALL-2026-Navigator-main/CORRIGIBILITY-2_NAVIGATOR_RELEASE_NOTE.md",
