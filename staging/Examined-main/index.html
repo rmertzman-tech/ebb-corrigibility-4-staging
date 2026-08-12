@@ -593,6 +593,7 @@ async function requestClaude(system,messages,maxTokens){
   finally{clearTimeout(timeoutId);if(externalSignal)externalSignal.removeEventListener('abort',relayAbort);}
   if(!resp.ok){ var errBody=await resp.text(); throw new Error('HTTP_'+resp.status+': '+errBody); }
     if(!resp.ok){ var errBody=await resp.text(); throw new Error('HTTP_'+resp.status+': '+errBody); }
+  if(!resp.ok){ var errBody=await resp.text(); throw new Error('HTTP_'+resp.status+': '+errBody); }
   var data=await resp.json();
   var textBlocks = (data.content && Array.isArray(data.content))
     ? data.content.filter(function(b){ return b && b.type==='text' && typeof b.text==='string'; })
@@ -601,6 +602,49 @@ async function requestClaude(system,messages,maxTokens){
   if(!responseText){
     var raw;
     try{ raw = JSON.stringify(data).slice(0,600); }catch(e){ raw = String(data).slice(0,600); }
+    throw new Error('EMPTY_RESPONSE: stop_reason='+(data.stop_reason||'(none present)')+' | raw response: '+raw);
+  }
+  return {
+    text:responseText,
+    stopReason:data.stop_reason||null,
+    model:data.model||null,
+    usage:data.usage||null
+  };
+
+WITH this block:
+
+  if(!resp.ok){
+    var errBody=await resp.text();
+    throw new Error('HTTP_'+resp.status+': '+errBody);
+  }
+  var rawText=await resp.text();
+  var data;
+  try{
+    data=JSON.parse(rawText);
+  }catch(parseErr){
+    var plainText=String(rawText||'').trim();
+    if(!plainText) throw new Error('EMPTY_RESPONSE: backend returned an empty non-JSON body');
+    return {
+      text:plainText,
+      stopReason:null,
+      model:null,
+      usage:null
+    };
+  }
+  var responseText='';
+  if(typeof data.response==='string') responseText=data.response.trim();
+  if(!responseText && typeof data.reply==='string') responseText=data.reply.trim();
+  if(!responseText && typeof data.text==='string') responseText=data.text.trim();
+  if(!responseText && data.content && Array.isArray(data.content)){
+    responseText=data.content
+      .filter(function(b){ return b && b.type==='text' && typeof b.text==='string'; })
+      .map(function(b){ return b.text; })
+      .join('\n\n')
+      .trim();
+  }
+  if(!responseText){
+    var raw;
+    try{ raw=JSON.stringify(data).slice(0,600); }catch(e){ raw=String(data).slice(0,600); }
     throw new Error('EMPTY_RESPONSE: stop_reason='+(data.stop_reason||'(none present)')+' | raw response: '+raw);
   }
   return {
