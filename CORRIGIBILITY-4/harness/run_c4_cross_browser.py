@@ -2,7 +2,6 @@
 from playwright.sync_api import sync_playwright
 from pathlib import Path
 import subprocess,time,socket,json,os,sys
-
 HERE=Path(__file__).resolve().parent
 ROOT=Path(os.environ.get('C4_STAGING_ROOT',str(HERE.parent/'staging')))
 OUT=Path(os.environ.get('C4_OUTPUT_DIR',str(HERE.parent/'cross_output'))); OUT.mkdir(parents=True,exist_ok=True)
@@ -10,7 +9,6 @@ PORT=int(os.environ.get('C4_CROSS_PORT','8895')); BASE=f'http://127.0.0.1:{PORT}
 NAV=f'{BASE}/SPC-FALL-2026-Navigator-main/index.html'; EX=f'{BASE}/Examined-main/index.html'
 BROWSERS=[x.strip() for x in os.environ.get('C4_BROWSERS','chromium,firefox,webkit').split(',') if x.strip()]
 results=[]
-
 def add(browser,tid,name,ok,e=''):
     results.append({'browser':browser,'id':tid,'name':name,'status':'PASS' if ok else 'FAIL','evidence':str(e)})
     print(f"{browser} {tid} {'PASS' if ok else 'FAIL'} — {name}"+(f" — {e}" if e else ''))
@@ -21,7 +19,6 @@ def wait_server():
             with socket.create_connection(('127.0.0.1',PORT),timeout=.2): return True
         except Exception: time.sleep(.1)
     return False
-
 def setj(page,k,v): page.evaluate("([k,v])=>localStorage.setItem(k,JSON.stringify(v))",[k,v])
 def getj(page,k,d=None): return page.evaluate("([k,d])=>{const s=localStorage.getItem(k);if(s===null)return d;try{return JSON.parse(s)}catch(e){return s}}",[k,d])
 def open_twin(page,page_errors,stage):
@@ -52,7 +49,6 @@ def route_mock(route,request):
     if 'extract one brief learning' not in sys_txt: time.sleep(.45)
     payload={'response':text,'reply':text,'content':[{'type':'text','text':text}],'stop_reason':'end_turn'}
     route.fulfill(status=200,content_type='application/json',headers={'Access-Control-Allow-Origin':'*'},body=json.dumps(payload))
-
 server=subprocess.Popen(['python','-m','http.server',str(PORT),'--bind','127.0.0.1'],cwd=ROOT,stdout=(OUT/'http_server.log').open('w'),stderr=subprocess.STDOUT)
 try:
     if not wait_server():raise RuntimeError('server failed')
@@ -68,21 +64,21 @@ try:
             ctx.route('**/api/claude-proxy',route_mock)
             # NAV load
             page_errors=[]; nav=ctx.new_page(); nav.on('pageerror',lambda e:page_errors.append(str(e)))
-            r=nav.goto(NAV,wait_until='domcontentloaded',timeout=30000); nav.evaluate("localStorage.clear();localStorage.setItem('navigator_ai_processing_consent_v1','accepted-v1')"); nav.reload(wait_until='domcontentloaded'); nav.evaluate("showWorkspace('twin')"); nav.wait_for_timeout(60)
+            r=nav.goto(NAV,wait_until='domcontentloaded',timeout=30000); nav.evaluate("localStorage.clear();localStorage.setItem('navigator_ai_processing_consent_v1','accepted-v1')"); nav.reload(wait_until='domcontentloaded'); open_twin(nav,page_errors,'initial'); nav.wait_for_timeout(60)
             add(bname,'CB-01','Navigator loads with expected identity',bool(r and r.ok) and nav.locator('meta[name="navigator-build"]').get_attribute('content')=='navigator-fall-2026-corrigibility-2-prototype',nav.title())
             add(bname,'CB-02','Navigator has no page errors',not page_errors,json.dumps(page_errors[:3]))
             btn=nav.get_by_role('button',name='Stay literal',exact=True).first; btn.focus(); nav.keyboard.press('Enter');
             add(bname,'CB-03','Navigator mode changes by keyboard',nav.locator('#corrigibility-mode-label').inner_text().strip()=='Mode: stay literal',nav.locator('#sr-status').inner_text())
             # veto
-            setj(nav,'navigator_twin_v2_chat',[{'id':'u','role':'user','content':'It works.','provenance':'USER_REPORTED','epistemicStatus':'user_report'},{'id':'a','role':'assistant','content':'Hidden mechanism.','provenance':'AI_OUTPUT','epistemicStatus':'conversation_record'}]); nav.reload(wait_until='domcontentloaded'); nav.evaluate("showWorkspace('twin')"); nav.locator("button[onclick*='rejectTwinInterpretation'][onclick*='a']").focus(); nav.keyboard.press('Enter'); nav.wait_for_timeout(20)
+            setj(nav,'navigator_twin_v2_chat',[{'id':'u','role':'user','content':'It works.','provenance':'USER_REPORTED','epistemicStatus':'user_report'},{'id':'a','role':'assistant','content':'Hidden mechanism.','provenance':'AI_OUTPUT','epistemicStatus':'conversation_record'}]); nav.reload(wait_until='domcontentloaded'); open_twin(nav,page_errors,'veto'); nav.locator("button[onclick*='rejectTwinInterpretation'][onclick*='a']").focus(); nav.keyboard.press('Enter'); nav.wait_for_timeout(20)
             target=next(x for x in getj(nav,'navigator_twin_v2_chat',[]) if x.get('id')=='a'); add(bname,'CB-04','Navigator response veto works by keyboard',target.get('epistemicStatus')=='rejected',json.dumps(target))
             # pending keep/reject
-            setj(nav,'navigator_corrigibility_v1_pending_learnings',[{'id':'p','text':'seems to value rest','category':'meaning','confidence':.7,'sourceTurnIds':['u'],'provenance':'AI_INFERRED','storageClass':'PENDING_MEMORY','status':'pending'}]); setj(nav,'navigator_twin_v2_journal',[]); nav.reload(wait_until='domcontentloaded'); nav.evaluate("showWorkspace('twin')"); nav.get_by_role('button',name='Keep this',exact=True).focus(); nav.keyboard.press('Enter'); nav.wait_for_function("()=>{try{return JSON.parse(localStorage.getItem('navigator_twin_v2_journal')||'[]').length===1}catch(e){return false}}",timeout=2000)
+            setj(nav,'navigator_corrigibility_v1_pending_learnings',[{'id':'p','text':'seems to value rest','category':'meaning','confidence':.7,'sourceTurnIds':['u'],'provenance':'AI_INFERRED','storageClass':'PENDING_MEMORY','status':'pending'}]); setj(nav,'navigator_twin_v2_journal',[]); nav.reload(wait_until='domcontentloaded'); open_twin(nav,page_errors,'pending-keep'); nav.get_by_role('button',name='Keep this',exact=True).focus(); nav.keyboard.press('Enter'); nav.wait_for_function("()=>{try{return JSON.parse(localStorage.getItem('navigator_twin_v2_journal')||'[]').length===1}catch(e){return false}}",timeout=2000)
             add(bname,'CB-05','Navigator pending memory Keep works by keyboard',len(getj(nav,'navigator_twin_v2_journal',[]))==1,'journal='+str(len(getj(nav,'navigator_twin_v2_journal',[]))))
-            setj(nav,'navigator_corrigibility_v1_pending_learnings',[{'id':'p2','text':'seems to value a hidden mechanism','category':'meaning','confidence':.7,'sourceTurnIds':['u'],'provenance':'AI_INFERRED','storageClass':'PENDING_MEMORY','status':'pending'}]); setj(nav,'navigator_twin_v2_chat',[]); nav.reload(wait_until='domcontentloaded'); nav.evaluate("showWorkspace('twin')"); nav.locator('#pending-learning-panel button',has_text='Not what I meant').focus(); nav.keyboard.press('Enter'); nav.wait_for_timeout(20)
+            setj(nav,'navigator_corrigibility_v1_pending_learnings',[{'id':'p2','text':'seems to value a hidden mechanism','category':'meaning','confidence':.7,'sourceTurnIds':['u'],'provenance':'AI_INFERRED','storageClass':'PENDING_MEMORY','status':'pending'}]); setj(nav,'navigator_twin_v2_chat',[]); nav.reload(wait_until='domcontentloaded'); open_twin(nav,page_errors,'pending-reject'); nav.locator('#pending-learning-panel button',has_text='Not what I meant').focus(); nav.keyboard.press('Enter'); nav.wait_for_timeout(20)
             add(bname,'CB-06','Navigator pending memory Reject works by keyboard',len(getj(nav,'navigator_corrigibility_v1_pending_learnings',[]))==0,nav.locator('#sr-status').inner_text())
             # stop
-            nav.evaluate("localStorage.clear();localStorage.setItem('navigator_ai_processing_consent_v1','accepted-v1')"); nav.reload(wait_until='domcontentloaded'); nav.evaluate("showWorkspace('twin')"); nav.evaluate("()=>{window.fetch=async()=>{await new Promise(r=>setTimeout(r,900));const t='C4 delayed cross-browser mock response.';return new Response(JSON.stringify({response:t,reply:t,content:[{type:'text',text:t}],stop_reason:'end_turn'}),{status:200,headers:{'Content-Type':'application/json'}})}}"); nav.locator('#chat-input').fill('Test delayed response.'); nav.evaluate('()=>{sendToTwin();return true}'); nav.wait_for_timeout(60); st=nav.locator('#stop-twin-btn'); vis=st.is_visible();
+            nav.evaluate("localStorage.clear();localStorage.setItem('navigator_ai_processing_consent_v1','accepted-v1')"); nav.reload(wait_until='domcontentloaded'); open_twin(nav,page_errors,'stop'); nav.evaluate("()=>{window.fetch=async()=>{await new Promise(r=>setTimeout(r,900));const t='C4 delayed cross-browser mock response.';return new Response(JSON.stringify({response:t,reply:t,content:[{type:'text',text:t}],stop_reason:'end_turn'}),{status:200,headers:{'Content-Type':'application/json'}})}}"); nav.locator('#chat-input').fill('Test delayed response.'); nav.evaluate('()=>{sendToTwin();return true}'); nav.wait_for_timeout(60); st=nav.locator('#stop-twin-btn'); vis=st.is_visible();
             if vis: st.focus(); nav.keyboard.press('Enter')
             nav.wait_for_timeout(650); add(bname,'CB-07','Navigator Stop blocks delayed persistence',vis and 'C4 delayed cross-browser mock response.' not in nav.locator('#chat-log').inner_text(),nav.locator('#chat-log').inner_text()[-120:])
             # EX
@@ -100,7 +96,6 @@ finally:
     server.terminate()
     try:server.wait(timeout=3)
     except Exception:server.kill()
-
 summary={'build':'CORRIGIBILITY-4','browsers':BROWSERS,'total':len(results),'pass':sum(r['status']=='PASS' for r in results),'fail':sum(r['status']=='FAIL' for r in results),'results':results}
 (OUT/'CORRIGIBILITY-4_CROSS_BROWSER_RESULTS.json').write_text(json.dumps(summary,indent=2)+'\n')
 print(json.dumps({k:summary[k] for k in ['browsers','total','pass','fail']},indent=2))
