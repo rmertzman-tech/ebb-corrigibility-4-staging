@@ -541,8 +541,10 @@ function examinedCorrigibilityInstruction(){
   return 'INTERACTION MODE — NORMAL: Use bounded reflection. Interpretations are provisional and must yield to user correction.';
 }
 function safeExaminedChatHistory(){
-  return (state.chatHistory||[]).filter(function(m){return !(m&&m.role==='assistant'&&m.epistemicStatus==='rejected');}).slice(-10).map(function(m){
-    return {role:m.role,content:m.content,provenance:m.provenance||(m.role==='user'?'USER_REPORTED':m.role==='assistant'?'AI_OUTPUT':'SYSTEM_EVENT'),epistemicStatus:m.epistemicStatus||'conversation_record'};
+  return (state.chatHistory||[]).filter(function(m){
+    return !(m&&m.role==='assistant'&&m.epistemicStatus==='rejected');
+  }).slice(-10).map(function(m){
+    return {role:m.role,content:m.content};
   });
 }
 function rejectExaminedInterpretation(id){
