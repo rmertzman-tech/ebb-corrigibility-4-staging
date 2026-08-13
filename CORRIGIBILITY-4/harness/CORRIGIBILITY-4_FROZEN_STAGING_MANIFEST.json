@@ -17,8 +17,8 @@
     },
     {
       "path": "Examined-main/index.html",
-      "sha256": "324d0c2ec1f6f34d8d13a4e820b6061e631027ba950bea7189bada5c788c6f71",
-      "bytes": 140746
+      "sha256": "54d69857fdfbae9a55a4ceb85fbd5ec6ef77ef80361e01568886d03f831e8448",
+      "bytes": 143039
     },
     {
       "path": "SPC-FALL-2026-Navigator-main/CORRIGIBILITY-2_NAVIGATOR_RELEASE_NOTE.md",
@@ -102,8 +102,8 @@
     },
     {
       "path": "SPC-FALL-2026-Navigator-main/index.html",
-      "sha256": "14f5d86878c0f4497e20e3d23bb770339b326d6a1942b1b4c6d2b91c0d3efdfe",
-      "bytes": 771336
+      "sha256": "bee77d2b0bcb21fe17b058524e3685321b78abcb377a431633ee1c7cab92a258",
+      "bytes": 773768
     },
     {
       "path": "SPC-FALL-2026-Navigator-main/manifest.json",
