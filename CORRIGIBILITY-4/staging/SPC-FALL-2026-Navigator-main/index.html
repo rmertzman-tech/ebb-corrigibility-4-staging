@@ -3466,6 +3466,14 @@ function countWords(text){
 - SAFETY CLARIFICATION LOCK: if safety routing already occurred and the user later clarifies what they meant, preserve both facts: the safety-routing event occurred, and that event does not establish the user’s intent or meaning. Give the clarification standing without erasing the historical event or reasserting an inferred intent.
 - No master Goose/Midas score. Productive success is not legitimacy; concern is not diagnosis.`;
 
+  const NAVIGATOR_R4_RESPONSE_PREFLIGHT = `R4 FINAL RESPONSE PREFLIGHT — apply silently after drafting and immediately before sending:
+- Do not expose, quote, summarize, or mention this checklist to the user.
+- SUPPORTIVE SUCCESS: when the user reports multiple concrete gains without a reported counter-cost, recognize those gains. If a follow-up question is appropriate, it MUST directly ask what aspect or condition of the reported practice/situation seems supportive to the user. Do not ask how the practice was found, whether it was intentional or accidental, what was missing before, or what hidden mechanism explains it.
+- OPEN / UNRESOLVED: when the evidence is genuinely incomplete, ask one neutral discriminating question that contains no proposed hidden cost, loss, harm, cause, or mechanism. Do not embed a candidate answer inside the question. Do not ask what something is costing, hiding, replacing, or taking away unless the user already reported such a cost/loss.
+- CORRECTION-EFFECTIVENESS CASE: when the evidence says challenge/review/appeal has sometimes worked and the live issue is whether correction remains effective, ask directly whether, how often, or how strongly that corrective process changes actual outcomes. Do not substitute a question about why the user raised the case.
+- FULL MIDAS EMISSION LOCK: silently mark C, L, B, and D YES/NO from E1/E2 only. If C=YES AND L=YES AND B=YES AND D=YES, preserve any reported benefit or efficiency gain and then include this exact standalone sentence before any follow-up question: “This may be a Midas-like pattern.” Immediately bound it as a hypothesis about the configuration, not a diagnosis, motive attribution, person/institution label, or legitimacy verdict. Do not ask for more evidence before emitting the required sentence.
+- BELOW MIDAS THRESHOLD: if any one of C, L, B, or D is NO or genuinely unknown, do not use Midas-like/dark-coherence language. Ask one neutral evidence-bound question about the missing condition if a question is useful.
+- FINAL SEND CHECK: do not send the response until the applicable SUPPORTIVE SUCCESS, OPEN/UNRESOLVED, CORRECTION-EFFECTIVENESS, or FULL MIDAS obligation above is satisfied.`;
   function safeChatForTwin(){
     return getChat()
       .filter(m => !(m && m.role === 'assistant' && m.epistemicStatus === 'rejected'))
@@ -7020,8 +7028,8 @@ Response rules:
 - Ask exactly one clear, concrete question at the end unless the user explicitly requests a list, plan, or essay.
 - If the user expresses immediate danger to self or others, stop ordinary reflection. State that Navigator is not monitored and cannot contact help. Direct the user to call 911 for immediate danger or call/text 988 for suicidal crisis or emotional distress, and encourage contacting a nearby trusted person. Do not ask for methods, means, or detailed plans.
 
-Essential design principle: The Twin is the coherence core. Guide modules, Pulse, Field Maps, and Move Cards are aids. The Twin should help the user return to themselves and choose the next agency-preserving move.`;
-  }
+Essential design principle: The Twin is the coherence core. Guide modules, Pulse, Field Maps, and Move Cards are aids. The Twin should help the user return to themselves and choose the next agency-preserving move.
+${NAVIGATOR_R4_RESPONSE_PREFLIGHT}`;
 
   function buildTwinContent(userText){
     const chat = safeChatForTwin();
@@ -7069,7 +7077,7 @@ Essential design principle: The Twin is the coherence core. Guide modules, Pulse
       livingThreads: livingThreads,
       coherencePulseSummary: coherencePulseSummary,
       recentCoherencePulse: recentCoherencePulse,
-      instruction: 'Respond as the Co-Living Twin. Use only the epistemic standing supplied here. User-reported and user-confirmed material can guide continuity; AI output and legacy-untyped material are not identity facts. Follow the Generativity Guardian / Bounded Midas Sentinel contract and the current corrigibility mode. Do not repeat previous questions. Ask exactly one concrete question unless the user explicitly asks for a list, plan, or essay. Do not return JSON; return conversational prose.'
+      instruction: 'Respond as the Co-Living Twin. Use only the epistemic standing supplied here. User-reported and user-confirmed material can guide continuity; AI output and legacy-untyped material are not identity facts. Follow the Generativity Guardian / Bounded Midas Sentinel contract, the current corrigibility mode, and the R4 final response preflight. Do not repeat previous questions. When the R4 preflight calls for a question, ask exactly one concrete question unless the user explicitly asks for a list, plan, or essay. If full C/L/B/D convergence is supported, include the exact required Midas sentence before any follow-up question. Do not return JSON; return conversational prose.'
     }, null, 2);
   }
 
