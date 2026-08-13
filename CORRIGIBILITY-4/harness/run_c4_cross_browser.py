@@ -24,7 +24,20 @@ def wait_server():
 
 def setj(page,k,v): page.evaluate("([k,v])=>localStorage.setItem(k,JSON.stringify(v))",[k,v])
 def getj(page,k,d=None): return page.evaluate("([k,d])=>{const s=localStorage.getItem(k);if(s===null)return d;try{return JSON.parse(s)}catch(e){return s}}",[k,d])
-
+def open_twin(page,page_errors,stage):
+    page.wait_for_timeout(100)
+    if page_errors:
+        print(f"NAV_PAGE_ERRORS {stage}: {json.dumps(page_errors[-5:])}")
+    try:
+        page.wait_for_function("()=>typeof window.showWorkspace==='function'",timeout=3000)
+    except Exception:
+        print(f"NAV_READY_FAIL {stage}: {json.dumps(page_errors[-10:])}")
+        try:
+            print("NAV_READY_STATE",page.evaluate("()=>({href:location.href,ready:document.readyState,showWorkspace:typeof window.showWorkspace})"))
+        except Exception as e:
+            print("NAV_READY_STATE_ERROR",repr(e))
+        raise
+    page.evaluate("showWorkspace('twin')")
 def route_mock(route,request):
     if request.method=='OPTIONS':
         return route.fulfill(status=204,headers={'Access-Control-Allow-Origin':'*','Access-Control-Allow-Headers':'Content-Type','Access-Control-Allow-Methods':'POST, OPTIONS'},body='')
